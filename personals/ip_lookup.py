@@ -3,9 +3,9 @@ from discord.ext import tasks
 import discord
 import datetime
 
-TOKEN = 'OTkwNDQ0MDI3MjE0MTgwNDQy.GIkGFe.ryf0pYxLJ_bB9s8OgSnyOGfzbE70ehshkj6SnU'
-channel_id = 991469606919229440
-message_id = 991484751397539950
+TOKEN = '' # put bot token in the ''
+channel_id = 123 # replace 123 with channel id
+message_id = 456 # replace 456 with message id, this requires the bot to send a message first 
 external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
 client = discord.Client()
 
