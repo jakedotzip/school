@@ -40,13 +40,19 @@ def add_guest():
     logs_output.configure(text = d + last_entry)
 
     
-
+# Load archive
+def load_archive():
+    with open ('hotelreg.pkl','rb') as F:
+        db = pickle.load(F)
+    
+    for i in db:
+        logs_output.configure(text = i + '-' + str(db[i]))
     
 
 
 # Frames
 form_frame = LabelFrame(root, text='Form')
-form_frame.grid(row=0,  columnspan=4, sticky='W',
+form_frame.grid(row=0,  columnspan=4, sticky='WE',
                 padx=5,  pady=5, ipadx=5, ipady=5)
 
 
@@ -90,16 +96,20 @@ info_frame.grid(row=7, columnspan=4, sticky='WE',
 info_output = Label(info_frame, justify=LEFT)
 info_output.grid(row=0, column=0, sticky='W', padx=5, pady=2)
 
-# Submit
+# Submit (Add Data)
 submit_button = Button(root, text='Add Data', command=add_guest)
 submit_button.grid(row=10, column = 2, sticky='W',
                 padx=5,  pady=5, ipadx=5, ipady=5)
 
+# Load Button 
+load_button = Button(root, text='Load Archive', command=load_archive)
+load_button.grid(row=7, column=5,sticky='W',
+                 padx=5,  pady=5, ipadx=5, ipady=5)
 # Logs
 log_frame = LabelFrame(root, text='Logs')
 log_frame.grid(row=0, column = 5, columnspan=20, rowspan = 6, sticky='NSWE',
                padx=5,  pady=5)
-logs_output = Label(log_frame, justify=LEFT)
+logs_output = Label(log_frame, text="All database will be shown here")
 logs_output.grid(row=0)
 
 # Company Label
@@ -107,7 +117,7 @@ company_label = Label(root,
     text="HotelHELL \n ver. 1.2.3",
     foreground="white",# Set the text color to white
     background="blue"# Set the background color
-).grid(row = 7, column= 5, columnspan=5, sticky='WE',
+).grid(row = 7, column= 6, columnspan=5, sticky='WE',
        padx=5,  pady=5, ipadx=5, ipady=5)
 
 
