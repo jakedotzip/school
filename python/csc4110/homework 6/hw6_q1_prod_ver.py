@@ -1,5 +1,5 @@
 from tkinter import *
-import pickle, datetime, os, random, time, string
+import pickle, random, time, string
 
 # Create Object
 root = Tk()
@@ -12,7 +12,6 @@ def add_guest():
     with open ('hotelreg.pkl','rb') as F:
         db = pickle.load(F)
     
-
     # Get input info
     name = name_entry.get().translate(str.maketrans('', '', string.punctuation))
     address = addy_entry.get().translate(str.maketrans('', '', string.punctuation))
@@ -34,6 +33,15 @@ def add_guest():
         pickle.dump(db,F)
 
     info_output.configure(text= GuestID + '\n' + str(db[GuestID]))
+
+    for i in db:
+        d = logs_output.cget("text")
+    last_entry = ''.join(i + '-' + str(db[i]) + '\n')
+    logs_output.configure(text = d + last_entry)
+
+    
+
+    
 
 
 # Frames
@@ -89,8 +97,18 @@ submit_button.grid(row=10, column = 2, sticky='W',
 
 # Logs
 log_frame = LabelFrame(root, text='Logs')
-log_frame.grid(row=0, column = 5, rowspan = 8, sticky='NSE',
+log_frame.grid(row=0, column = 5, columnspan=20, rowspan = 6, sticky='NSWE',
                padx=5,  pady=5)
-logs_output = Label(log_frame, text='All database show here', justify=LEFT)
+logs_output = Label(log_frame, justify=LEFT)
 logs_output.grid(row=0)
+
+# Company Label
+company_label = Label(root,
+    text="HotelHELL \n ver. 1.2.3",
+    foreground="white",# Set the text color to white
+    background="blue"# Set the background color
+).grid(row = 7, column= 5, columnspan=5, sticky='WE',
+       padx=5,  pady=5, ipadx=5, ipady=5)
+
+
 root.mainloop()
