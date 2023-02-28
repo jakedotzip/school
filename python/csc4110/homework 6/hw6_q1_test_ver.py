@@ -1,5 +1,5 @@
 from tkinter import *
-import pickle, datetime, os, random, time, string
+import pickle, random, time, string, os
 
 # Create Object
 root = Tk()
@@ -8,11 +8,11 @@ root.title("Hotel Registration")
 
 # Add new guest
 def add_guest():
-
-    with open ('hotelreg.pkl','rb') as F:
-        db = pickle.load(F)
-    
-
+    if os.path.getsize('hotelreg.pkl') > 0:
+        with open ('hotelreg.pkl','rb') as F:
+            db = pickle.load(F)
+    else:
+        db = {}
     # Get input info
     name = name_entry.get().translate(str.maketrans('', '', string.punctuation))
     address = addy_entry.get().translate(str.maketrans('', '', string.punctuation))
@@ -35,10 +35,34 @@ def add_guest():
 
     info_output.configure(text= GuestID + '\n' + str(db[GuestID]))
 
+    for i in db:
+        d = logs_output.cget("text")
+    last_entry = ''.join(i + '-' + str(db[i]) + '\n')
+    logs_output.configure(text = d + last_entry)
+
+    
+# Load archive
+def load_archive():
+    if os.path.getsize('hotelreg.pkl') > 0:
+        with open ('hotelreg.pkl','rb') as F:
+            db = pickle.load(F)
+        logs_output.configure(text='')    
+        for i in db:
+            d = logs_output.cget("text") + i + '-' + str(db[i]) + '\n'
+            logs_output.configure(text = d)
+    else:
+        logs_output.configure(text = "Database is empty")
+    
+    
+def fake_entry():
+    name_entry.insert(0, '*G!H%HWEK')
+    addy_entry.insert(0, '(@HEROHQ)')
+    duration_entry.insert(0, '&THTABH^na')
+    room_entry.insert(0, '&G!3B')
 
 # Frames
 form_frame = LabelFrame(root, text='Form')
-form_frame.grid(row=0,  columnspan=4, sticky='W',
+form_frame.grid(row=0,  columnspan=4, sticky='WE',
                 padx=5,  pady=5, ipadx=5, ipady=5)
 
 
@@ -82,15 +106,34 @@ info_frame.grid(row=7, columnspan=4, sticky='WE',
 info_output = Label(info_frame, justify=LEFT)
 info_output.grid(row=0, column=0, sticky='W', padx=5, pady=2)
 
-# Submit
+# Submit (Add Data)
 submit_button = Button(root, text='Add Data', command=add_guest)
-submit_button.grid(row=10, column = 2, sticky='W',
+submit_button.grid(row=10, column = 1, sticky='W',
                 padx=5,  pady=5, ipadx=5, ipady=5)
 
+# Fetch fake entries (Add Data)
+submit_button = Button(root, text='Fetch Fake Data', command=fake_entry)
+submit_button.grid(row=10, column = 3, sticky='W',
+                padx=5,  pady=5, ipadx=5, ipady=5)
+
+# Load Button 
+load_button = Button(root, text='Load Archive', command=load_archive)
+load_button.grid(row=7, column=5,sticky='W',
+                 padx=5,  pady=5, ipadx=5, ipady=5)
 # Logs
 log_frame = LabelFrame(root, text='Logs')
-log_frame.grid(row=0, column = 5, rowspan = 8, sticky='NSE',
+log_frame.grid(row=0, column = 5, columnspan=20, rowspan = 6, sticky='NSWE',
                padx=5,  pady=5)
-logs_output = Label(log_frame, text='All database show here', justify=LEFT)
+logs_output = Label(log_frame)
 logs_output.grid(row=0)
+
+# Company Label
+company_label = Label(root,
+    text="HotelHELL \n ver. 1.2.3",
+    foreground="white",# Set the text color to white
+    background="blue"# Set the background color
+).grid(row = 7, column= 6, columnspan=5, sticky='WE',
+       padx=5,  pady=5, ipadx=5, ipady=5)
+
+
 root.mainloop()

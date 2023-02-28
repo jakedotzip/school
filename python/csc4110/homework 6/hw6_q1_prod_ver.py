@@ -1,5 +1,5 @@
 from tkinter import *
-import pickle, random, time, string
+import pickle, random, time, string, os
 
 # Create Object
 root = Tk()
@@ -8,10 +8,11 @@ root.title("Hotel Registration")
 
 # Add new guest
 def add_guest():
-
-    with open ('hotelreg.pkl','rb') as F:
-        db = pickle.load(F)
-    
+    if os.path.getsize('hotelreg.pkl') > 0:
+        with open ('hotelreg.pkl','rb') as F:
+            db = pickle.load(F)
+    else:
+        db = {}
     # Get input info
     name = name_entry.get().translate(str.maketrans('', '', string.punctuation))
     address = addy_entry.get().translate(str.maketrans('', '', string.punctuation))
@@ -42,11 +43,17 @@ def add_guest():
     
 # Load archive
 def load_archive():
-    with open ('hotelreg.pkl','rb') as F:
-        db = pickle.load(F)
+    if os.path.getsize('hotelreg.pkl') > 0:
+        with open ('hotelreg.pkl','rb') as F:
+            db = pickle.load(F)
+        logs_output.configure(text='')    
+        for i in db:
+            d = logs_output.cget("text") + i + '-' + str(db[i]) + '\n'
+            logs_output.configure(text = d)
+    else:
+        logs_output.configure(text = "Database is empty")
     
-    for i in db:
-        logs_output.configure(text = i + '-' + str(db[i]))
+    
     
 
 
@@ -109,7 +116,7 @@ load_button.grid(row=7, column=5,sticky='W',
 log_frame = LabelFrame(root, text='Logs')
 log_frame.grid(row=0, column = 5, columnspan=20, rowspan = 6, sticky='NSWE',
                padx=5,  pady=5)
-logs_output = Label(log_frame, text="All database will be shown here")
+logs_output = Label(log_frame)
 logs_output.grid(row=0)
 
 # Company Label
