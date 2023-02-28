@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import pickle, random, time, string, os
 
 # Create Object
@@ -8,10 +9,11 @@ root.title("Hotel Registration")
 
 # Add new guest
 def add_guest():
+    
     if os.path.getsize('hotelreg.pkl') > 0:
         with open ('hotelreg.pkl','rb') as F:
             db = pickle.load(F)
-    else:
+    else:        
         db = {}
     # Get input info
     name = name_entry.get().translate(str.maketrans('', '', string.punctuation))
@@ -51,7 +53,7 @@ def load_archive():
             d = logs_output.cget("text") + i + '-' + str(db[i]) + '\n'
             logs_output.configure(text = d)
     else:
-        logs_output.configure(text = "Database is empty")
+        messagebox.showinfo("info", "Database is empty")
     
     
     

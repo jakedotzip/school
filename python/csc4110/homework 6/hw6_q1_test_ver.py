@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import pickle, random, time, string, os
 
 # Create Object
@@ -51,7 +52,7 @@ def load_archive():
             d = logs_output.cget("text") + i + '-' + str(db[i]) + '\n'
             logs_output.configure(text = d)
     else:
-        logs_output.configure(text = "Database is empty")
+        messagebox.showinfo("info", "Database is empty")
     
     
 def fake_entry():
